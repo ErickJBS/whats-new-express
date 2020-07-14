@@ -1,4 +1,4 @@
-const mongoose, { Types, Schema, model } = require('mongoose');
+const { Types, Schema, model } = mongoose = require('mongoose');
 require('mongoose-currency').loadType(mongoose);
 const Currency = Types.Currency;
 
