@@ -12,14 +12,13 @@ passport.deserializeUser(User.deserializeUser());
 const jwtSecret = process.env.JWT_SECRET;
 
 exports.getToken = (user) => {
-    const jwtSecret = jwtSecret;
     return jwt.sign(user, jwtSecret, {
         expiresIn: 3600
     });
 }
 
 const options = {
-    jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: jwtSecret
 }
 exports.jwtPassport = passport.use(new JwtStrategy(

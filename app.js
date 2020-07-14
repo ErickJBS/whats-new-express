@@ -4,8 +4,10 @@ const morgan = require('morgan');
 const passport = require('passport');
 const createError = require('http-errors');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const usersRouter = require('./routes/users.router.js');
+const eventsRouter = require('./routes/events.router.js');
 
 const url = process.env.MONGO_URL;
 mongoose.connect(url).then((db) => {
@@ -25,12 +27,14 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
+app.use(cors());
 
 // Expose public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/users', usersRouter);
+app.use('/events', eventsRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
