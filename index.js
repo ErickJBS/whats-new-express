@@ -1,23 +1,34 @@
 require('dotenv').config();
 const app = require('./app');
 const debug = require('debug');
+const http = require('http');
 const https = require('https');
 const fs = require('fs');
 
 const port = process.env.PORT || 3000;
+app.set('port', port);
+app.set('securePort', port + 443);
 
 const httpsOptions = {
     key: fs.readFileSync('assets/https/private.key'),
     cert: fs.readFileSync('assets/https/certificate.pem')
 };
 
-const server = https.createServer(httpsOptions, app);
-server.listen(port, () => {
-  console.log('Server listening on port', port);
+const server = http.createServer(app);
+server.listen(app.get('port'), () => {
+  console.log('Server listening on port', app.get('port'));
 });
 
 server.on('error', onError);
 server.on('listening', onListening);
+
+const secureServer = https.createServer(httpsOptions, app);
+secureServer.listen(app.get('securePort'), () => {
+  console.log('Server listening on port', app.get('securePort'));
+});
+
+secureServer.on('error', onError);
+secureServer.on('listening', onListening);
 
 function onError(error) {
   if (error.syscall !== 'listen') {
