@@ -5,7 +5,7 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 
-const port = process.env.PORT || 3000;
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 app.set('securePort', port + 443);
 
@@ -29,6 +29,22 @@ secureServer.listen(app.get('securePort'), () => {
 
 secureServer.on('error', onError);
 secureServer.on('listening', onListening);
+
+function normalizePort(value) {
+  var port = parseInt(value, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
 
 function onError(error) {
   if (error.syscall !== 'listen') {
